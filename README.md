@@ -4,6 +4,8 @@
 
 ***
 
+**视频(BiliBili): https://www.bilibili.com/video/BV1uDqVBjEZN/**
+
 **本反作弊只考虑 1.8 服务器上的 1.7 与 1.8 版本的玩家!!!**
 
 **请不要报告 高版本 或 跨版本 的误判!!!**
