@@ -1,0 +1,42 @@
+name: FairFight
+main: me.dw1e.ff.FairFightPlugin
+version: 0.18.2
+description: 专为1.8竞技场服务器打造的轻量级反作弊.
+author: dw1e
+depend: [ ProtocolLib ]
+
+commands:
+  fairfight:
+    aliases: [ ff ]
+
+permissions:
+  fairfight.bypass:
+    default: false
+
+  fairfight.command.alerts:
+    default: op
+  fairfight.command.getvl:
+    default: op
+  fairfight.command.gui:
+    default: op
+  fairfight.command.help:
+    default: op
+  fairfight.command.ping:
+    default: op
+  fairfight.command.reload:
+    default: op
+  fairfight.command.resetvl:
+    default: op
+  fairfight.command.verbose:
+    default: op
+  fairfight.command.*:
+    default: op
+    children:
+      fairfight.command.alerts: true
+      fairfight.command.getvl: true
+      fairfight.command.gui: true
+      fairfight.command.help: true
+      fairfight.command.ping: true
+      fairfight.command.reload: true
+      fairfight.command.resetvl: true
+      fairfight.command.verbose: true
