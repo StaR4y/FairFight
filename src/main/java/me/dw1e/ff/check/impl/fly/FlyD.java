@@ -34,7 +34,7 @@ public final class FlyD extends Check {
                     flag(String.format("step, deltaY=%.7f", deltaY), Math.max(1.0, Math.abs(deltaY) * 5.0));
             }
 
-            // 检查直接从粘液块上起跳的跳跃高度, 或约跳越高, 高度无衰减
+            // 检查直接从粘液块上起跳的跳跃高度, 或越跳越高, 高度无衰减
             check_slime:
             {
                 if (!data.isOnSlime()) break check_slime;

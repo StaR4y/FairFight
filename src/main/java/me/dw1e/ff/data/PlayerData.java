@@ -37,6 +37,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class PlayerData {
 
@@ -52,7 +53,7 @@ public final class PlayerData {
 
     private Location lastLastLocation, lastLocation;
 
-    private boolean alerts, verbose, bypass, kicked, punished; // 玩家在反作弊内的状态
+    private boolean alerts, verbose, bypass, kicked, punished; // 玩家在反作弊内的一些设置
 
     private boolean // 玩家行为/状态
             updatePos, allowedFly, isFlying, instantlyBuild,
@@ -108,7 +109,7 @@ public final class PlayerData {
             tickSincePlacedBlock = 20,
             inventoryOpenTicks;
 
-    private int // 碰撞类的计数
+    private int // 碰撞类的计时
             climbingTicks = 20,
             tickSinceClimbing = 20,
             tickSinceInLiquid = 20,
@@ -153,7 +154,7 @@ public final class PlayerData {
         sprinting = player.isSprinting();
         sneaking = player.isSneaking();
 
-        lastSentTransaction = lastRepliedTransaction = System.currentTimeMillis();
+        lastSentTransaction = lastRepliedTransaction = lastFlyingTime = System.currentTimeMillis();
 
         FairFight.INSTANCE.sendToMainThread(() ->
                 player.getWorld().getEntities().stream()
@@ -808,7 +809,15 @@ public final class PlayerData {
 
         actionMap.put(transId, runnable);
 
-        transId = transId > 0 ? Short.MIN_VALUE : (short) (transId + 1);
+        //transId = transId > 0 ? Short.MIN_VALUE : (short) (transId + 1);
+
+        short newId; // 使用随机ID, 兼容其它反作弊, 也可以防止作弊端预测
+
+        do {
+            newId = (short) -ThreadLocalRandom.current().nextInt(32768);
+        } while (newId == transId);
+
+        transId = newId;
 
         lastSentTransaction = System.currentTimeMillis();
     }
@@ -853,29 +862,62 @@ public final class PlayerData {
     }
 
     public void confirmConnection() {
-        if (System.currentTimeMillis() - lastSentTransaction > 1000L) transConfirm(() -> {/*仅测延迟*/});
+        long now = System.currentTimeMillis();
+
+        if (now - lastSentTransaction > 1000L) transConfirm(() -> {/*仅测延迟*/});
 
         if (!ConfigValue.timeout_check_enabled || bypass || kicked
                 || FairFight.INSTANCE.getServerTickTask().isLagging()) return;
 
-        long delay = System.currentTimeMillis() - lastRepliedTransaction;
+        check_transaction:
+        {
+            if (!ConfigValue.timeout_check_transaction_enabled) break check_transaction;
 
-        if (delay > ConfigValue.timeout_check_max_delay) {
-            kicked = true;
+            long delay = now - lastRepliedTransaction;
 
-            FairFight.INSTANCE.sendToMainThread(() -> player.kickPlayer(StringUtil
-                    .color(ConfigValue.timeout_check_kick_message.replace("%prefix%", FairFight.PREFIX))));
+            if (delay > ConfigValue.timeout_check_transaction_max_delay) {
+                timeoutCheckAlert(
+                        ConfigValue.timeout_check_transaction_kick_message,
+                        ConfigValue.timeout_check_transaction_alert_message,
+                        delay
+                );
 
-            String message = StringUtil.color(ConfigValue.timeout_check_alert_message
-                    .replace("%prefix%", FairFight.PREFIX)
-                    .replace("%player%", player.getName())
-                    .replace("%delay%", "" + delay)
-            );
-
-            FairFight.INSTANCE.getDataManager().toStaff(staff -> staff.getPlayer().sendMessage(message));
-
-            if (ConfigValue.alerts_print_to_console) Bukkit.getConsoleSender().sendMessage(message);
+                return; // 踢一个就行, 不用走下面的了
+            }
         }
+
+        check_flying:
+        {
+            if (!ConfigValue.timeout_check_flying_enabled) break check_flying;
+
+            long delay = now - lastFlyingTime;
+
+            if (delay > ConfigValue.timeout_check_flying_max_delay) {
+                timeoutCheckAlert(
+                        ConfigValue.timeout_check_flying_kick_message,
+                        ConfigValue.timeout_check_flying_alert_message,
+                        delay
+                );
+            }
+        }
+
+    }
+
+    private void timeoutCheckAlert(String kickMessage, String alertMessage, long delay) {
+        kicked = true;
+
+        FairFight.INSTANCE.sendToMainThread(() -> player.kickPlayer(StringUtil
+                .color(kickMessage.replace("%prefix%", FairFight.PREFIX))));
+
+        String message = StringUtil.color(alertMessage
+                .replace("%prefix%", FairFight.PREFIX)
+                .replace("%player%", player.getName())
+                .replace("%delay%", "" + delay)
+        );
+
+        FairFight.INSTANCE.getDataManager().toStaff(staff -> staff.getPlayer().sendMessage(message));
+
+        if (ConfigValue.alerts_print_to_console) Bukkit.getConsoleSender().sendMessage(message);
     }
 
     public boolean testJumped() {

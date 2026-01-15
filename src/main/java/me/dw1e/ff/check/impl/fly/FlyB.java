@@ -30,7 +30,7 @@ public final class FlyB extends Check {
 
             if (clientGround != mathGround && !exempt) {
 
-                // 防止一些误判, 给一个快速衰减的缓冲, 但是不要衰减VL, 不然一些NoFall绕过的VL可能不足以封禁
+                // 防止一些误判, 给一个快速衰减的缓冲, 但是不要衰减VL, 不然一些NoFall触发的VL可能不足以封禁
                 if (buffer.add() > 1) flag(String.format("client=%s, math=%s", clientGround, mathGround));
 
             } else buffer.reduce(0.05);

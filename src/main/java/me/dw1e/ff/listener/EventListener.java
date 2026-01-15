@@ -9,7 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
@@ -70,15 +69,6 @@ public final class EventListener implements Listener {
             PlayerData data = FairFight.INSTANCE.getDataManager().getData(event.getVehicle().getPassenger().getUniqueId());
 
             if (data != null) data.transConfirm(() -> data.setInVehicle(false));
-        }
-    }
-
-    @EventHandler
-    private void onInventoryOpen(InventoryOpenEvent event) {
-        if (event.getPlayer() instanceof Player) {
-            PlayerData data = FairFight.INSTANCE.getDataManager().getData(event.getPlayer().getUniqueId());
-
-            if (data != null) data.transConfirm(data::resetUsingItem);
         }
     }
 

@@ -30,9 +30,16 @@ public final class ConfigValue {
 
     // 超时检测的配置
     public static boolean timeout_check_enabled;
-    public static long timeout_check_max_delay;
-    public static String timeout_check_kick_message;
-    public static String timeout_check_alert_message;
+
+    public static boolean timeout_check_transaction_enabled;
+    public static long timeout_check_transaction_max_delay;
+    public static String timeout_check_transaction_kick_message;
+    public static String timeout_check_transaction_alert_message;
+
+    public static boolean timeout_check_flying_enabled;
+    public static long timeout_check_flying_max_delay;
+    public static String timeout_check_flying_kick_message;
+    public static String timeout_check_flying_alert_message;
     // 超时检测的配置
 
     public static void update() {
@@ -61,9 +68,16 @@ public final class ConfigValue {
 
         // 超时检测的配置
         timeout_check_enabled = config.getBoolean("timeout_check.enabled");
-        timeout_check_max_delay = config.getLong("timeout_check.max_delay");
-        timeout_check_kick_message = config.getString("timeout_check.kick_message");
-        timeout_check_alert_message = config.getString("timeout_check.alert_message");
+
+        timeout_check_transaction_enabled = config.getBoolean("timeout_check.transaction.enabled");
+        timeout_check_transaction_max_delay = config.getLong("timeout_check.transaction.max_delay");
+        timeout_check_transaction_kick_message = config.getString("timeout_check.transaction.kick_message");
+        timeout_check_transaction_alert_message = config.getString("timeout_check.transaction.alert_message");
+
+        timeout_check_flying_enabled = config.getBoolean("timeout_check.flying.enabled");
+        timeout_check_flying_max_delay = config.getLong("timeout_check.flying.max_delay");
+        timeout_check_flying_kick_message = config.getString("timeout_check.flying.kick_message");
+        timeout_check_flying_alert_message = config.getString("timeout_check.flying.alert_message");
         // 超时检测的配置
     }
 
