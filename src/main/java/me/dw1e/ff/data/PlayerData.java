@@ -154,7 +154,7 @@ public final class PlayerData {
         sprinting = player.isSprinting();
         sneaking = player.isSneaking();
 
-        lastSentTransaction = lastRepliedTransaction = lastFlyingTime = System.currentTimeMillis();
+        lastSentTransaction = lastRepliedTransaction = lastFlyingTime = flyingTime = System.currentTimeMillis();
 
         FairFight.INSTANCE.sendToMainThread(() ->
                 player.getWorld().getEntities().stream()
@@ -185,7 +185,7 @@ public final class PlayerData {
         CheckManager checkManager = FairFight.INSTANCE.getCheckManager();
 
         if (!bypass) {
-            for (Check check : checks) {
+            for (Check check : new ArrayList<>(checks)) {
                 if (!checkManager.getCheckValue(check).isEnabled()) continue;
 
                 check.handle(packet);
