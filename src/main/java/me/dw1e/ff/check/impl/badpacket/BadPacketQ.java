@@ -32,13 +32,17 @@ public final class BadPacketQ extends Check {
         if (packet instanceof CPacketTransaction) {
             CPacketTransaction wrapper = (CPacketTransaction) packet;
 
+            short action = wrapper.getActionId();
+
+            if (action > 0) return; // actionId > 0 代表不是本反作弊发送的确认包的id范围
+
             // 在没有任何待确认的 Transaction 时却回复了一个 (预测)
             if (pendingTransactions.isEmpty()) {
                 flag("unexpected");
                 return;
             }
 
-            short expected = pendingTransactions.peekFirst(), action = wrapper.getActionId();
+            short expected = pendingTransactions.peekFirst();
 
             // 顺序不匹配 (乱序, 跳号)
             if (expected != action) {
@@ -55,7 +59,7 @@ public final class BadPacketQ extends Check {
 
             short action = wrapper.getActionId();
 
-            // windowId = 0 代表玩家背包(一般反作弊都用), actionId > 0 代表不是本反作弊发送的确认包的id范围
+            // windowId = 0 代表玩家背包(一般反作弊都用)
             if (wrapper.getWindowId() != 0 || action > 0) return;
 
             pendingTransactions.addLast(action);

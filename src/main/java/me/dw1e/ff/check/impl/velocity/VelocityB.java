@@ -29,7 +29,7 @@ public final class VelocityB extends Check {
             if (tick == 1) predictedXZ = data.getVelocityXZ();
 
             if (data.isNearWall() || data.isInVehicle() || data.isInWeb() || data.isPushedByPiston()
-                    || data.isClimbing() || data.getTickSinceTeleport() == 1) predictedXZ = 0.0;
+                    || data.isClimbing() || data.getTickSinceTeleport() < 4) predictedXZ = 0.0;
 
             if (predictedXZ > 0.0) {
                 if (data.getTickSinceAttack() == 1) predictedXZ *= 0.6F;

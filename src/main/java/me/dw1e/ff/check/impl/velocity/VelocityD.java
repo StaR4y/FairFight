@@ -26,6 +26,7 @@ public final class VelocityD extends Check {
                     || data.isOnSlime() || data.isClimbing() || data.isPushedByPiston()
                     || data.getTickSinceInLiquid() < 2
                     || data.getTickSinceNearWall() < 3
+                    || data.getTickSinceTeleport() < 4
             ) return;
 
             double offset = data.getEmulationProcessor().getMinDistance();
