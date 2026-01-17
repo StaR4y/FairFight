@@ -215,7 +215,7 @@ public final class CheckManager {
 
         String format = replaceAndColor(ConfigValue.alerts_format, data, check)
                 .replace("%vl%", decimalFormat.format(check.getViolations()))
-                .replace("%max_vl%", "" + checkValue.getPunishVL());
+                .replace("%max_vl%", String.valueOf(checkValue.getPunishVL()));
 
         TextComponent alertMessage = new TextComponent(format);
 

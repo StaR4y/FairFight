@@ -809,13 +809,13 @@ public final class PlayerData {
 
         actionMap.put(transId, runnable);
 
-        //transId = transId > 0 ? Short.MIN_VALUE : (short) (transId + 1);
-
         short newId; // 使用随机ID, 兼容其它反作弊, 也可以防止作弊端预测
 
         do {
             newId = (short) -ThreadLocalRandom.current().nextInt(32768);
         } while (newId == transId);
+
+        // 一般反作弊使用的id范围是 -32767 到 0, 因为原版服务器是从 1 开始发的
 
         transId = newId;
 
@@ -912,7 +912,7 @@ public final class PlayerData {
         String message = StringUtil.color(alertMessage
                 .replace("%prefix%", FairFight.PREFIX)
                 .replace("%player%", player.getName())
-                .replace("%delay%", "" + delay)
+                .replace("%delay%", String.valueOf(delay))
         );
 
         FairFight.INSTANCE.getDataManager().toStaff(staff -> staff.getPlayer().sendMessage(message));
