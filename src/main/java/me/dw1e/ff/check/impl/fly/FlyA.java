@@ -97,7 +97,7 @@ public final class FlyA extends Check {
 
             if (data.getTickSinceOnSlime() < 9 // 从较高处下落被粘液块弹起时误判
                     || data.getTickSinceClimbing() < 2 // 刚离开梯子时
-                    || data.getTickSinceVelocity() < 8 // 被击退后概率误判
+                    || data.getTickSinceVelocity() <= data.getMaxVelocityTicks() // 被击退后概率误判
                     || data.getTickSinceOtherVelocity() == 1 // 摔伤/烫伤等其它负击退
                     || (data.getTickSinceNearWall() < 3 && data.isInLiquid()) // 从液体中刚上岸
                     || (data.getTickSinceUnderBlock() < 2 && (data.getTickSinceClientGround() < 3

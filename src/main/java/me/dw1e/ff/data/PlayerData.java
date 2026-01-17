@@ -476,7 +476,6 @@ public final class PlayerData {
             transConfirm(() -> {
                 if (wrapper.getY() >= 0.0) {
                     tickSinceVelocity = 0;
-                    maxVelocityTicks = (int) (((wrapper.getX() + wrapper.getY() + wrapper.getZ()) / 2 + 2) * 10);
                 } else { // y < 0 一般为摔伤
                     tickSinceOtherVelocity = 0;
                 }
@@ -486,6 +485,10 @@ public final class PlayerData {
                 velocityZ = wrapper.getZ();
 
                 velocityXZ = MathUtil.hypot(Math.abs(velocityX), Math.abs(velocityZ));
+
+                // 击退滞空时长只受垂直击退影响, 在相同垂直高度的情况下, 水平击退为0.1与2.0的击退滞空时长均相同
+                // 但是有可能会遇到y_limit的情况, 所以最少给8ticks
+                maxVelocityTicks = (int) Math.max(Math.round(20.0 * Math.pow(velocityY, 0.6)), 8);
             });
         } else if (packet instanceof SPacketNamedEntitySpawn) {
             SPacketNamedEntitySpawn wrapper = (SPacketNamedEntitySpawn) packet;

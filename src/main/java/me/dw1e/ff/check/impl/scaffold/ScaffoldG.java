@@ -8,7 +8,7 @@ import me.dw1e.ff.packet.wrapper.WrappedPacket;
 import me.dw1e.ff.packet.wrapper.client.CPacketBlockPlace;
 import org.bukkit.block.BlockFace;
 
-@CheckInfo(category = Category.SCAFFOLD, type = "G", desc = "检查异常的放置成功率(≥80%)", maxVL = 10)
+@CheckInfo(category = Category.SCAFFOLD, type = "G", desc = "检查异常的放置成功率(≥60%)", maxVL = 10)
 public final class ScaffoldG extends Check {
 
     private int success, failure;
@@ -38,7 +38,8 @@ public final class ScaffoldG extends Check {
             if (success + failure >= 10) {
                 double ratio = (double) success / (success + failure);
 
-                if (ratio >= 0.8) flag("ratio=" + ratio);
+                // 比率可以改的小一点, 普通玩家在快速搭路时cps不可能很低
+                if (ratio >= 0.6) flag("ratio=" + ratio);
 
                 success = failure = 0;
             }

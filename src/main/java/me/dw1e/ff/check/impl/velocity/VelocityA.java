@@ -38,8 +38,9 @@ public final class VelocityA extends Check {
 
             if (predictedY > 0.0) {
                 double offset = predictedY - data.getDeltaY();
+                double limit = data.isOffsetYMotion() ? 0.03 : 1E-7;
 
-                if (offset > 1E-7) {
+                if (offset > limit) {
                     if (buffer.add() > tickOfCheck) flag(String.format("tick=%s, offset=%.7f", tick, offset));
                 } else buffer.reduce(0.1);
 

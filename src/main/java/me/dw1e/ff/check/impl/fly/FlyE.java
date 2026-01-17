@@ -26,11 +26,14 @@ public final class FlyE extends Check {
                     float limit = 0.1176F; // 向上爬的原版速度
 
                     int airTicks = data.getTickSinceClientGround();
-
                     if (airTicks <= 4 + data.getJumpEffect()) limit = data.getAttributeJump();
+
                     if (data.getTickSinceInLiquid() < 3) limit = 0.3F; // 在水中往上游时碰到梯子就是这么多
-                    if (data.getTickSinceVelocity() < 8)
+
+                    if (data.getTickSinceVelocity() <= data.getMaxVelocityTicks()) {
                         limit = (float) data.getVelocityY(); // 击退是有一个简单的模拟的, 详见PlayerData中
+                    }
+
                     if (data.getTickSinceNearStep() < 2) limit = 0.6F; // 例如 爬悬空藤曼时走上台阶
 
                     if (deltaY > limit) flag(String.format("↑ deltaY=%s/%s, ticks=%s", deltaY, limit, airTicks),

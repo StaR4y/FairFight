@@ -29,7 +29,7 @@ public final class ScaffoldD extends Check {
         if (packet instanceof CPacketBlockPlace) {
             CPacketBlockPlace wrapper = (CPacketBlockPlace) packet;
 
-            if (!data.isBridging() || !wrapper.isPlacedBlock() || data.getTick() - lastSneak <= 20) return;
+            if (!data.isBridging() || !wrapper.isPlacedBlock() || data.getTick() - lastSneak <= 10) return;
 
             // 方块中心点
             Vector blockLoc = wrapper.getBlockPosition().toVector().add(new Vector(0.5, 1.0, 0.5));

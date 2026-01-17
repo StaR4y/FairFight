@@ -55,7 +55,7 @@ public final class FlyD extends Check {
 
             if (!(lastGround && !ground) || deltaY <= 0.0 || data.isFlying() || data.isOnSlime()
                     || data.getTickSincePushedByPiston() < 2
-                    || data.getTickSinceVelocity() < 8
+                    || data.getTickSinceVelocity() <= data.getMaxVelocityTicks()
             ) return;
 
             boolean hasFlag = false;

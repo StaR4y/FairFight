@@ -20,10 +20,11 @@ public final class VelocityD extends Check {
     @Override
     public void handle(WrappedPacket packet) {
         if (packet instanceof CPacketFlying) {
-            int ticks = data.getTickSinceVelocity();
+            int ticks = data.getTickSinceVelocity(), maxTicks = data.getMaxVelocityTicks();
 
-            if (ticks > 8 || data.isFlying() || data.isInVehicle() || data.isInWeb()
-                    || data.isOnSlime() || data.isClimbing() || data.isPushedByPiston()
+            if (ticks > maxTicks // 全击退模拟
+                    || data.isFlying() || data.isInVehicle() || data.isInWeb() || data.isOnSlime()
+                    || data.isClimbing() || data.isPushedByPiston()
                     || data.getTickSinceInLiquid() < 2
                     || data.getTickSinceNearWall() < 3
                     || data.getTickSinceTeleport() < 4
@@ -33,7 +34,7 @@ public final class VelocityD extends Check {
             double limit = data.isOffsetMotion() ? 0.03 : 1E-7;
 
             if (offset > limit) {
-                if (buffer.add() > 3) flag(String.format("ticks=%s, offset=%.7f", ticks, offset));
+                if (buffer.add() > 3) flag(String.format("ticks=%s/%s, offset=%.7f", ticks, maxTicks, offset));
 
             } else buffer.reduce(0.05);
         }
