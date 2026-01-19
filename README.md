@@ -4,7 +4,9 @@
 
 ***
 
-**视频(BiliBili): https://www.bilibili.com/video/BV144421U7UQ/**
+**视频(BiliBili): https://www.bilibili.com/video/BV1nwrxBGEow/**
+
+**依赖 ProtocolLib (版本 ≥5.0.0): https://www.spigotmc.org/resources/protocollib.1997/**
 
 **本反作弊只考虑 1.8 服务器上的 1.7 与 1.8 版本的玩家!!!**
 

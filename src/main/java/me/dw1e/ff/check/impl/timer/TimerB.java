@@ -11,7 +11,7 @@ import me.dw1e.ff.packet.wrapper.client.CPacketFlying;
 
 import java.util.Deque;
 
-@CheckInfo(category = Category.TIMER, type = "B", desc = "检查数据包发送的平均时间", minVL = -3.0, maxVL = 15)
+@CheckInfo(category = Category.TIMER, type = "B", desc = "检查数据包发送的平均时间", minVL = -3.0, maxVL = 20)
 public final class TimerB extends Check {
 
     // 此检查用于修复'余额'滥用导致 Timer A 被绕过
@@ -36,13 +36,13 @@ public final class TimerB extends Check {
                         || data.getTickSinceSteerVehicle() < 2
                         || data.getTickSinceRidingInteract() < 6;
 
-                if (delay > 0L && !exempt) samples.add(delay); // delay=0一般代表玩家丢包卡顿, 恢复了将一堆攒着的包同时发
+                if (delay >= 5L && !exempt) samples.add(delay); // delay<5一般代表玩家丢包卡顿, 恢复了将一堆攒着的包同时发
 
-                if (samples.size() >= 40) {
+                if (samples.size() >= 20) {
                     double mean = MathUtil.mean(samples), speed = 50.0 / mean;
 
-                    if (mean <= 49.0) flag(String.format("speed=%.3f", speed));
-                    else decreaseVL(0.4);
+                    if (mean <= 49.0) flag(String.format("speed=%.3f", speed), speed * 1.5);
+                    else decreaseVL(0.5);
 
                     samples.clear();
                 }

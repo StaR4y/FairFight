@@ -93,9 +93,7 @@ public enum FairFight {
 
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketHandler(plugin));
 
-        resetVLTask = Bukkit.getScheduler().runTaskTimer(FairFight.INSTANCE.getPlugin(), () ->
-                        dataManager.getDataMap().values().forEach(PlayerData::resetVL),
-                0L, ConfigValue.violation_reset_interval * 60L * 20L);
+        resetVLTask = getNewResetVLTask();
     }
 
     public void onDisable(FairFightPlugin plugin) {
@@ -144,6 +142,17 @@ public enum FairFight {
 
         guiManager.disable();
         guiManager.enable();
+
+        if (resetVLTask != null) {
+            resetVLTask.cancel();
+            resetVLTask = getNewResetVLTask();
+        }
+    }
+
+    private BukkitTask getNewResetVLTask() {
+        return Bukkit.getScheduler().runTaskTimer(FairFight.INSTANCE.getPlugin(), () ->
+                        dataManager.getDataMap().values().forEach(PlayerData::resetVL),
+                0L, ConfigValue.violation_reset_interval * 60L * 20L);
     }
 
     public void sendToMainThread(Runnable runnable) {

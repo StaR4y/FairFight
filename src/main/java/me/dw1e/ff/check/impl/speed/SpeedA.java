@@ -25,7 +25,7 @@ public final class SpeedA extends Check {
     @Override
     public void handle(WrappedPacket packet) {
         if (packet instanceof CPacketFlying && ((CPacketFlying) packet).isPosition()) {
-            if (data.isFlying()
+            if (data.getTick() < 20 || data.isFlying()
                     || data.getTickSincePushedByPiston() < 2
                     || data.getTickSinceAbilityChange() < 3
                     || data.getTickSinceSteerVehicle() < 3

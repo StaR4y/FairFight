@@ -101,11 +101,11 @@ public final class FlyA extends Check {
                     || data.getTickSinceOtherVelocity() == 1 // 摔伤/烫伤等其它负击退
                     || (data.getTickSinceNearWall() < 3 && data.isInLiquid()) // 从液体中刚上岸
                     || (data.getTickSinceUnderBlock() < 2 && (data.getTickSinceClientGround() < 3
-                    || Math.max(deltaY, lastDeltaY) > 0.0) && deltaY < maxYMotion)) // 顶头跳, 地面刻<3为2格顶头
-
+                    || Math.max(deltaY, lastDeltaY) > 0.0) && deltaY < maxYMotion) // 顶头跳, 地面刻<3为2格顶头
+            ) {
                 threshold = maxThreshold; // 设置阈值为跳跃/击退高度
 
-            else if (data.getTickSinceInLiquid() == 1) { // 在水面上下游动
+            } else if (data.getTickSinceInLiquid() == 1) { // 在水面上下游动
                 // 在水面按住空格每15ticks才会往下掉且加速一次, 此判断用于检查绕过
                 if (data.getTick() - lastLeaveLiquidTicks >= 15) threshold = maxThreshold;
 
