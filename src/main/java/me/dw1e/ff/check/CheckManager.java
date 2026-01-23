@@ -104,7 +104,6 @@ public final class CheckManager {
         checkList.add(BadPacketO.class);
         checkList.add(BadPacketP.class);
         checkList.add(BadPacketQ.class);
-        checkList.add(BadPacketR.class);
 
         checkList.add(FlyA.class);
         checkList.add(FlyB.class);
